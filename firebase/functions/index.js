@@ -20,11 +20,27 @@ const functions = require("firebase-functions");
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+const axios = require("axios");
 
 exports.createChatEngineUser = functions.auth.user().onCreate((user) => {
-    console.log("create", user);
+  axios.post(
+    "https://api.chatengine.io/users/",
+    {
+      username: user.email,
+      secret: user.uid,
+      email: user.email,
+      first_name: user.displayName,
+    },
+    { headers: { "Private-Key": "048e6381-621a-4512-b346-41cbfecb839f" } }
+  );
+});
+
+exports.deleteChatEngineUser = functions.auth.user().onDelete((user) => {
+  axios.delete("https://api.chatengine.io/users/me/", {
+    headers: {
+      "Project-ID": "b1f6451d-3011-475d-ba1b-6755f717449c",
+      "User-Name": user.email,
+      "User-Secret": user.uid,
+    },
   });
-  
-  exports.deleteChatEngineUser = functions.auth.user().onDelete((user) => {
-    console.log("delete", user);
-  });
+});
