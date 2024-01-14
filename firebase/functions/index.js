@@ -1,3 +1,5 @@
+
+
 /**
  * Import function triggers from their respective submodules:
  *
@@ -9,6 +11,7 @@
 
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
+const functions = require("firebase-functions");
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -17,3 +20,11 @@ const logger = require("firebase-functions/logger");
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+exports.createChatEngineUser = functions.auth.user().onCreate((user) => {
+    console.log("create", user);
+  });
+  
+  exports.deleteChatEngineUser = functions.auth.user().onDelete((user) => {
+    console.log("delete", user);
+  });
